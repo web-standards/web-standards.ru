@@ -182,10 +182,6 @@
     background-image: url('/images/social/telegram.svg');
 }
 
-.links__icon--threads {
-    background-image: url('/images/social/threads.svg');
-}
-
 .links__icon--vk {
     background-image: url('/images/social/vk.svg');
 }
