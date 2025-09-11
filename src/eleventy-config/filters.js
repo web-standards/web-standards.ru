@@ -1,5 +1,6 @@
 import markdownIt from 'markdown-it';
 import htmlmin from 'html-minifier-terser';
+import { stripHeadings, stripLists } from '../libs/markdown-transforms.js';
 
 const markdown = markdownIt({
     html: true,
@@ -52,12 +53,33 @@ export default function(eleventyConfig) {
         return markdown.renderInline(value);
     });
 
-    eleventyConfig.addFilter('htmlmin', (value) => {
-        return htmlmin.minify(
+    eleventyConfig.addFilter('htmlmin', async(value) => {
+        return await htmlmin.minify(
             value, {
                 collapseWhitespace: true,
                 removeEmptyElements: true,
             }
         );
+    });
+
+    eleventyConfig.addFilter('duration', (time) => {
+        // если длительность берётся из json-файла, то она задана в миллисекундах
+        if (typeof time === 'number') {
+            return Math.round(time / 1000);
+        }
+
+        return time.split(':').reduceRight((acc, item, index, items) => {
+            return acc += parseFloat(item) * Math.pow(60, items.length - 1 - index);
+        }, 0);
+    });
+
+    const podcastMarkdown = markdownIt({
+        html: true,
+    })
+        .use(stripHeadings)
+        .use(stripLists);
+
+    eleventyConfig.addFilter('podcastMarkdown', (content) => {
+        return podcastMarkdown.render(content);
     });
 };
