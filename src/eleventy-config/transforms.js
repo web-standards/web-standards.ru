@@ -1,5 +1,6 @@
 import path from 'node:path';
 import os from 'node:os';
+import fs from 'node:fs';
 import htmlmin from 'html-minifier-terser';
 import minifyXml from 'minify-xml';
 import { parseHTML } from 'linkedom';
@@ -11,12 +12,9 @@ const isProdMode = process.env.NODE_ENV === 'production';
 
 async function processImage({ imageElement, inputPath, options, attributes }) {
     const imageStats = await Image(inputPath, {
-        filenameFormat: (hash, src, width, format) => {
-            const extension = path.extname(src);
-            const name = path.basename(src, extension);
-            return `${hash}-${name}-${width}.${format}`;
-        },
-        ...options,
+        outputDir: '.cache/@11ty/_images',
+        urlPath: '/_images/',
+        ...options
     });
 
     const imageAttributes = Object.assign(
@@ -53,7 +51,6 @@ export default function(eleventyConfig) {
         }
 
         const articleSourceFolder = path.dirname(this.page.inputPath);
-        const outputArticleImagesFolder = path.join(path.dirname(this.page.outputPath), 'images');
 
         await Promise.all(images.map(async(image) => {
             const fullImagePath = path.join(articleSourceFolder, image.src);
@@ -69,8 +66,6 @@ export default function(eleventyConfig) {
                     formats: isProdMode && !isGif
                         ? ['svg', 'avif', 'webp', 'auto']
                         : ['svg', 'webp', 'auto'],
-                    outputDir: outputArticleImagesFolder,
-                    urlPath: 'images/',
                     svgShortCircuit: true,
                     sharpOptions: {
                         animated: true,
@@ -108,7 +103,6 @@ export default function(eleventyConfig) {
 
         await Promise.all(images.map(async(image) => {
             const fullImagePath = path.join(eleventyConfig.dir.input, image.src);
-            const avatarsOutputFolder = path.dirname(path.join(eleventyConfig.dir.output, image.src));
 
             await processImage({
                 imageElement: image,
@@ -124,14 +118,18 @@ export default function(eleventyConfig) {
                     formats: isProdMode
                         ? ['svg', 'avif', 'webp', 'auto']
                         : ['svg', 'webp', 'auto'],
-                    outputDir: avatarsOutputFolder,
-                    urlPath: image.src.split('/').slice(0, -1).join('/'),
                     svgShortCircuit: true,
                 },
             });
         }));
 
         return document.toString();
+    });
+
+    eleventyConfig.on('eleventy.after', () => {
+        const from = '.cache/@11ty/_images/';
+        const to = path.join(eleventyConfig.directories.output, '_images');
+        fs.cpSync(from, to, { recursive: true });
     });
 
     eleventyConfig.addTransform('lazyYouTube', (content, outputPath) => {
