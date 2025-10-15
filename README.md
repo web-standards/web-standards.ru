@@ -1,7 +1,6 @@
 # Веб-стандарты
 [![](https://github.com/web-standards/web-standards.ru/workflows/editorconfig/badge.svg)](https://github.com/web-standards/web-standards.ru/actions?query=workflow%3aeditorconfig)
 [![](https://github.com/web-standards/web-standards.ru/workflows/markdown/badge.svg)](https://github.com/web-standards/web-standards.ru/actions?query=workflow%3amarkdown)
-[![](https://github.com/web-standards/web-standards.ru/workflows/html/badge.svg)](https://github.com/web-standards/web-standards.ru/actions?query=workflow%3ahtml)
 [![](https://github.com/web-standards/web-standards.ru/workflows/stylelint/badge.svg)](https://github.com/web-standards/web-standards.ru/actions?query=workflow%3astylelint)
 [![](https://github.com/web-standards/web-standards.ru/workflows/eslint/badge.svg)](https://github.com/web-standards/web-standards.ru/actions?query=workflow%3aeslint)
 [![](https://github.com/web-standards/web-standards.ru/workflows/yaml/badge.svg)](https://github.com/web-standards/web-standards.ru/actions?query=workflow%3ayaml)
