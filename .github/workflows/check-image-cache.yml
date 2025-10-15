@@ -1,0 +1,25 @@
+name: Check Image Cache
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 4'
+
+jobs:
+  check-images-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache images
+        id: images-cache
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-images
+        with:
+          path: '.cache/@11ty/_images'
+          enableCrossOsArchive: true
+          key: images-${{ hashFiles('src/articles/**/*.png', 'src/articles/**/*.jpg', 'src/articles/**/*.svg', 'src/articles/**/*.gif', 'src/people/**/*.jpg') }}
+      - name: check cache
+        if: steps.images-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: echo "Кэш изображений не найден
