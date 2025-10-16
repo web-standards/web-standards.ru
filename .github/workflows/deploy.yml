@@ -2,9 +2,9 @@ name: deploy
 
 on:
   push:
-  workflow_dispatch:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -14,6 +14,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: package.json
+      - name: Images cache
+        id: images-cache
+        uses: actions/cache@v4
+        with:
+          path: '.cache/@11ty/_images'
+          enableCrossOsArchive: true
+          key: images-${{ hashFiles('src/articles/**/*.png', 'src/articles/**/*.jpg', 'src/articles/**/*.svg', 'src/articles/**/*.gif', 'src/people/**/*.jpg') }}
       # Setup key
       - name: Setup key
         run: |

@@ -96,6 +96,18 @@
     grid-column: 1 / -1;
 }
 
+.podcast__player::before {
+    --_scrollbar-size: var(--scrollbar-size, 0);
+    content: '';
+    position: absolute;
+    inset-block: -16px;
+    inset-inline: calc(50% - 50vw + var(--_scrollbar-size) / 2);
+    z-index: -1;
+    background-color: color-mix(in srgb, var(--token-color-background-primary) 50%, transparent);
+    border-bottom: 1px solid var(--token-color-podcast-header-border);
+    backdrop-filter: blur(10px);
+}
+
 .podcast__timecode {
     grid-column: 1 / -1;
 }

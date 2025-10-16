@@ -3,3 +3,4 @@ dist
 
 # certificates for local development
 certs
+.cache

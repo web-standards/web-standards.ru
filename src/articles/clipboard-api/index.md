@@ -129,7 +129,7 @@ document.querySelector('.tooltip').addEventListener('click', () => {
 });
 ```
 
-[Полный пример кода на GitHub](https://github.com/web-standards-ru/web-standards.ru/blob/master/src/scripts/modules/copy-link.js).
+[Полный пример кода на GitHub](https://github.com/web-standards/web-standards.ru/blob/master/src/scripts/modules/copy-link.js).
 
 Метод `window.navigator.clipboard.writeText` возвращает `Promise`, что позволяет обрабатывать исключения, если они возникнут. Одним из таких случаев может быть запрет на запись в буфер. Ниже мы рассмотрим, как запросить необходимые права для чтения и записи в буфер.
 
