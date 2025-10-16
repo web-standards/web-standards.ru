@@ -22,4 +22,4 @@ jobs:
       - name: check cache
         if: steps.images-cache.outputs.cache-hit != 'true'
         shell: bash
-        run: echo "Кэш изображений не найден
+        run: echo "Кэш изображений не найден"
