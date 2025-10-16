@@ -1,0 +1,75 @@
+---
+permalink: /podcast/feed/index.xml
+---
+
+<?xml version='1.0' encoding='utf-8'?>
+<rss
+    version='2.0'
+    xmlns:atom='http://www.w3.org/2005/Atom'
+    xmlns:itunes='http://www.itunes.com/dtds/podcast-1.0.dtd'
+    xmlns:content='http://purl.org/rss/1.0/modules/content/'
+>
+    <channel>
+        <title>{{podcast.title}}</title>
+        <description><![CDATA[{{podcast.description | inlineMarkdown | safe}}]]></description>
+        <copyright>{{podcast.copyright}}</copyright>
+        <language>{{podcast.language}}</language>
+        <link>{{podcast.url}}</link>
+
+        <atom:link href='{{podcast.url}}feed/' rel='self' type='application/rss+xml'/>
+
+        <itunes:subtitle>{{podcast.subtitle}}</itunes:subtitle>
+        <itunes:type>{{podcast.type}}</itunes:type>
+        <itunes:author>{{podcast.author}}</itunes:author>
+        <itunes:explicit>{{podcast.explicit}}</itunes:explicit>
+        <itunes:owner>
+            <itunes:name>{{podcast.owner.name}}</itunes:name>
+            <itunes:email>{{podcast.owner.email}}</itunes:email>
+        </itunes:owner>
+        <itunes:image href='{{podcast.url}}cover.png'/>
+
+        {% for category in podcast.categories %}
+            <itunes:category text='{{category.title}}'>
+                {% for categoryItem in category.items %}
+                    <itunes:category text='{{categoryItem}}'/>
+                {% endfor %}
+            </itunes:category>
+        {% endfor %}
+
+        {% for episode in collections.episodes | reverse %}
+            {% set hosts = episode.data.hosts | join(', ') %}
+            <item>
+                <title>{{episode.fileSlug}}. {{episode.data.title}}</title>
+                <link>{{podcast.url}}{{episode.fileSlug}}/</link>
+                <pubDate>{{episode.date.toUTCString()}}</pubDate>
+                {% set hostsAndChaptersBlock %}
+                    <p>Ведущие: {{hosts}}</p>
+                    {% if episode.data.chapters.length > 0 %}
+                        <p>Темы</p>
+                        <p>
+                            {% for chapter in episode.data.chapters %}
+                                {{chapter.time}} {{chapter.title}}{% if not loop.last %}<br>{% endif %}
+                            {% endfor %}
+                        </p>
+                    {% endif %}
+                {% endset %}
+                <description><![CDATA[
+                    {{hostsAndChaptersBlock | safe}}
+                    {{episode.rawInput | podcastMarkdown | htmlmin | safe }}
+                ]]></description>
+                <guid isPermaLink='true'>{{podcast.url}}episodes/{{episode.fileSlug}}.mp3</guid>
+                <enclosure
+                    type='audio/mpeg'
+                    url='{{podcast.url}}episodes/{{episode.fileSlug}}.mp3'
+                    length='{{episode.data.fileSize}}'
+                />
+                <itunes:episode>{{episode.fileSlug}}</itunes:episode>
+                <itunes:duration>{{episode.data.duration | duration}}</itunes:duration>
+                <itunes:author>{{hosts}}</itunes:author>
+                <itunes:explicit>{{podcast.explicit}}</itunes:explicit>
+                <itunes:summary>{{episode.date | ruDate}}: {{episode.data.title}}. {{hosts}}</itunes:summary>
+                <itunes:image href='{{podcast.url}}cover.png'/>
+            </item>
+        {% endfor %}
+    </channel>
+</rss>
