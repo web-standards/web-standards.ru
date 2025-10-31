@@ -1,3 +1,6 @@
 node_modules
 dist
+
+# certificates for local development
+certs
 .cache
