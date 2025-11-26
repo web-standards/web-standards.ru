@@ -25,7 +25,6 @@ export default async function(eleventyConfig) {
         templateFormats: [
             'md',
             'njk',
-            '11ty.js',
         ],
     };
 };
