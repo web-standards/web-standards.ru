@@ -155,34 +155,6 @@ export default function(eleventyConfig) {
         return content;
     });
 
-    // добавление на заголовки id с временными метками внутри страниц подкастов
-    eleventyConfig.addTransform('podcast-headings', async function(content) {
-        if (!this.page?.outputPath?.endsWith?.('html')) {
-            return content;
-        }
-
-        // игнорируем страницы, не попадающие под url вида `/podcast/<номер подкаста>/`
-        if (!(/\podcast\/\d+\//.test(this.page?.url))) {
-            return content;
-        }
-
-        const { document } = parseHTML(content);
-
-        const titlesMap = Array.from(document.querySelectorAll('.podcast__content h2'))
-            .reduce((map, titleElement) => {
-                map[titleElement.textContent.trim()] = titleElement;
-                return map;
-            }, {});
-
-        for (const chapterElement of document.querySelectorAll('.podcast__timecode-chapter')) {
-            const titleText = chapterElement.querySelector('.podcast__timecode-title').textContent.trim();
-            const timeCode = chapterElement.querySelector('.podcast__timecode-link').textContent.trim();
-            titlesMap[titleText]?.setAttribute('id', timeCode);
-        }
-
-        return document.toString();
-    });
-
     // добавление id на заголовки и кнопок для копирования ссылок
     eleventyConfig.addTransform('content-headings', async function(content) {
         if (!this.page?.outputPath?.endsWith?.('html')) {
