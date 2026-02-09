@@ -1,7 +1,7 @@
 {
   "private": true,
   "engines": {
-    "node": "22"
+    "node": ">=24"
   },
   "type": "module",
   "scripts": {
@@ -20,19 +20,19 @@
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2",
     "@11ty/eleventy-img": "^6.0.4",
-    "@eslint/js": "^9.38.0",
+    "@eslint/js": "^10.0.1",
     "@mavrin/remark-typograf": "^2.2.0",
-    "browserslist": "^4.27.0",
+    "browserslist": "^4.28.1",
     "cross-env": "^10.1.0",
     "editorconfig-checker": "^6.1.1",
-    "esbuild": "^0.25.11",
-    "esbuild-plugin-browserslist": "^1.0.2",
-    "eslint": "^9.38.0",
+    "esbuild": "^0.27.3",
+    "esbuild-plugin-browserslist": "^2.0.0",
+    "eslint": "^10.0.0",
     "fast-glob": "^3.3.3",
-    "globals": "^16.4.0",
+    "globals": "^17.3.0",
     "html-minifier-terser": "^7.2.0",
-    "js-yaml": "^4.1.0",
-    "lightningcss": "^1.30.2",
+    "js-yaml": "^4.1.1",
+    "lightningcss": "^1.31.1",
     "linkedom": "^0.18.12",
     "markdown-it-multimd-table": "^4.2.3",
     "minify-xml": "^4.5.2",
@@ -44,8 +44,8 @@
     "remark-lint-ordered-list-marker-value": "^4.0.1",
     "remark-lint-strong-marker": "^4.0.1",
     "remark-lint-unordered-list-marker-style": "^4.0.1",
-    "stylelint": "^16.25.0",
-    "stylelint-order": "^7.0.0",
+    "stylelint": "^17.1.1",
+    "stylelint-order": "^7.0.1",
     "typograf": "^7.6.0"
   },
   "browserslist": [
