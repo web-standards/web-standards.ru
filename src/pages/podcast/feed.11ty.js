@@ -10,7 +10,7 @@ export default {
         }
 
         return time.split(':').reduceRight((acc, item, index, items) => {
-            return acc += parseFloat(item) * Math.pow(60, items.length - 1 - index);
+            return acc = parseFloat(item) * Math.pow(60, items.length - 1 - index);
         }, 0);
     },
 
