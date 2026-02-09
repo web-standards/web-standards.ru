@@ -10,16 +10,26 @@
             <h1 class="article__title podcast__title">
                 {{ episode.data.title }}
             </h1>
-            <section class="podcast__hosts">
-                <h2 class="podcast__hosts-heading">Ведущие:</h2>
-                <ul class="podcast__hosts-list">
-                    {% for host in episode.data.hosts %}
-                        <li class="podcast__host">
+            <dl class="podcast__participants">
+                <div>
+                    <dt>Ведущие:</dt>
+                    <dd>
+                        {% for host in episode.data.hosts %}
                             {{ host }}{% if not loop.last %},{% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
-            </section>
+                        {% endfor %}
+                    </dd>
+                </div>
+                {% if episode.data.guests %}
+                <div>
+                    <dt>Гости:</dt>
+                    <dd>
+                        {% for guest in episode.data.guests %}
+                            {{ guest }}{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    </dd>
+                </div>
+                {% endif %}
+            </dl>
         </header>
 
         <div class="podcast__player player">

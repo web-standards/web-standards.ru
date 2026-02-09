@@ -71,22 +71,19 @@
     }
 }
 
-.podcast__hosts-heading {
-    display: inline;
-    margin: 0 0.5em 0 0;
-    font-weight: 600;
-    font-size: inherit;
-    letter-spacing: 0.01em;
+.podcast__participants {
+    display: grid;
+    row-gap: 8px;
 }
 
-.podcast__hosts-list {
+.podcast__participants dt {
+    display: inline;
+    font-weight: bold;
+}
+
+.podcast__participants dd {
     display: inline;
     margin: 0;
-    padding: 0;
-}
-
-.podcast__host {
-    display: inline;
 }
 
 .podcast__player {
