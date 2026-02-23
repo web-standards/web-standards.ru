@@ -155,6 +155,27 @@ export default function(eleventyConfig) {
         return content;
     });
 
+    // открытие ссылок в новой вкладке внутри страниц эпизодов
+    eleventyConfig.addTransform('podcast-content', async function(content) {
+        if (!this.page?.outputPath?.endsWith?.('html')) {
+            return content;
+        }
+
+        // игнорируем страницы, не попадающие под url вида `/podcast/<номер эпизода>/`
+        if (!(/\podcast\/\d+\//.test(this.page?.url))) {
+            return content;
+        }
+
+        const { document } = parseHTML(content);
+
+        for (const link of document.querySelectorAll('.podcast__content a[href^="http"]')) {
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener');
+        }
+
+        return document.toString();
+    });
+
     // добавление id на заголовки и кнопок для копирования ссылок
     eleventyConfig.addTransform('content-headings', async function(content) {
         if (!this.page?.outputPath?.endsWith?.('html')) {
