@@ -49,8 +49,7 @@
     "typograf": "^7.6.0"
   },
   "browserslist": [
-    "last 2 version",
-    "not dead"
+    "baseline newly available"
   ],
   "nodeW3Cvalidator": {
     "suppressErrors": [
