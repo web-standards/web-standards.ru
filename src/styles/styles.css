@@ -84,4 +84,7 @@
     --color-dark-text-header: #f1f6fb;
     --color-dark-text-link: #539dd4;
     --color-dark-text-link-visited: #6885ec;
+
+    --font-main: 'Dewi', sans-serif;
+    --font-mono: 'Rostin', monospace;
 }
