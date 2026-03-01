@@ -167,7 +167,7 @@
     margin-right: 5px;
     color: var(--token-color-podcast-timecode-link);
     font-size: 15px;
-    font-family: 'Rostin', monospace;
+    font-family: var(--font-mono);
     text-decoration: none;
 }
 

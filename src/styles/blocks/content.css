@@ -286,7 +286,7 @@
 .content code {
     padding-right: 0.25em;
     padding-left: 0.25em;
-    font-family: 'Rostin', monospace;
+    font-family: var(--font-mono);
     word-wrap: break-word;
     background-color: var(--token-color-content-inline-code-background);
 }
