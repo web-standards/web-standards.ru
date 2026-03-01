@@ -48,26 +48,26 @@
 
 .podcast__title {
     margin: 16px 0 32px;
-    font-size: 21px;
+    font-size: 1.313rem;
     line-height: 1.2;
     letter-spacing: 0.03em;
 }
 
 @media (min-width: 600px) {
     .podcast__title {
-        font-size: 28px;
+        font-size: 1.75rem;
     }
 }
 
 @media (min-width: 900px) {
     .podcast__title {
-        font-size: 32px;
+        font-size: 2rem;
     }
 }
 
 @media (min-width: 1240px) {
     .podcast__title {
-        font-size: 48px;
+        font-size: 3rem;
     }
 }
 
@@ -123,7 +123,7 @@
 
 .podcast__timecode-heading {
     margin: 0 0 16px 0;
-    font-size: 16px;
+    font-size: 1rem;
     font-stretch: expanded;
     line-height: 1.2;
     letter-spacing: 0.08em;
@@ -132,19 +132,19 @@
 
 @media (min-width: 600px) {
     .podcast__timecode-heading {
-        font-size: 18px;
+        font-size: 1.125rem;
     }
 }
 
 @media (min-width: 1024px) {
     .podcast__timecode-heading {
-        font-size: 22px;
+        font-size: 1.375rem;
     }
 }
 
 @media (min-width: 1240px) {
     .podcast__timecode-heading {
-        font-size: 24px;
+        font-size: 1.5rem;
     }
 }
 
@@ -166,7 +166,7 @@
 .podcast__timecode-link {
     margin-right: 5px;
     color: var(--token-color-podcast-timecode-link);
-    font-size: 15px;
+    font-size: 0.94em;
     font-family: var(--font-mono);
     text-decoration: none;
 }
