@@ -1,6 +1,5 @@
 import * as esbuild from 'esbuild';
-import browserslist from 'browserslist';
-import { resolveToEsbuildTarget } from 'esbuild-plugin-browserslist';
+import browserslistToEsbuild from 'browserslist-to-esbuild';
 
 export default function(eleventyConfig, options = {}) {
     const formats = options.formats ?? ['js'];
@@ -34,9 +33,7 @@ export default function(eleventyConfig, options = {}) {
                 metafile: true,
                 minify: false,
                 bundle: true,
-                target: resolveToEsbuildTarget(browserslist(options.targets), {
-                    printUnknownTargets: false,
-                }),
+                target: browserslistToEsbuild(options.targets),
                 ...(options.esbuild || {}),
             });
 
