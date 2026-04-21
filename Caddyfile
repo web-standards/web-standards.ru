@@ -1,0 +1,31 @@
+web-standards.ru {
+    root * /opt/sites/web-standards.ru/public/site
+    tls wst@web-standards.ru
+    import common web-standards.ru
+
+    redir /tag/html5doctor/ /articles/tags/html/ permanent
+
+    @podcast {
+        path /podcast/cover.png /podcast/episodes/* /podcast/feed/ /podcast/feed/*
+    }
+
+    handle @podcast {
+        root * /opt/sites/web-standards.ru/public
+        file_server {
+            index index.html index.xml
+        }
+    }
+
+    handle_errors {
+        @404 expression {http.error.status_code} == 404
+        handle @404 {
+            rewrite * /404/index.html
+            file_server
+        }
+    }
+}
+
+www.web-standards.ru {
+    tls wst@web-standards.ru
+    redir https://web-standards.ru{uri} permanent
+}
