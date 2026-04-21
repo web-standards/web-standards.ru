@@ -16,7 +16,7 @@ jobs:
         env:
           cache-name: cache-images
         with:
-          path: '.cache/@11ty/_images'
+          path: '.cache/images'
           enableCrossOsArchive: true
           key: images-${{ hashFiles('src/articles/**/*.png', 'src/articles/**/*.jpg', 'src/articles/**/*.svg', 'src/articles/**/*.gif', 'src/people/**/*.jpg') }}
       - name: check cache

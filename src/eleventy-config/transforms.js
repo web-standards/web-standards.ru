@@ -10,10 +10,18 @@ Image.concurrency = os.availableParallelism ? os.availableParallelism() : os.cpu
 
 const isProdMode = process.env.NODE_ENV === 'production';
 
-async function processImage({ imageElement, inputPath, options, attributes }) {
+const CACHE_BASE = '.cache/images';
+
+function filenameFormat(id, src, width, format) {
+    const name = path.basename(src, path.extname(src));
+    return `${name}-${width}.${format}`;
+}
+
+async function processImage({ imageElement, inputPath, outputDir, urlPath, options, attributes }) {
     const imageStats = await Image(inputPath, {
-        outputDir: '.cache/@11ty/_images',
-        urlPath: '/_images/',
+        outputDir,
+        urlPath,
+        filenameFormat,
         ...options
     });
 
@@ -56,10 +64,15 @@ export default function(eleventyConfig) {
             const fullImagePath = path.join(articleSourceFolder, image.src);
             const isGif = path.extname(fullImagePath) === '.gif';
 
+            const imageDir = path.dirname(image.src);
+            const relativeDir = path.join(path.dirname(this.page.inputPath), imageDir).replace(/^src\//, '');
+
             await processImage({
                 document,
                 imageElement: image,
                 inputPath: fullImagePath,
+                outputDir: path.join(CACHE_BASE, relativeDir),
+                urlPath: imageDir,
                 options: {
                     widths: ['auto', 600, 1200, 2400],
                     // `sharp`, на данный момент, не поддерживает анимированный avif
@@ -103,10 +116,13 @@ export default function(eleventyConfig) {
 
         await Promise.all(images.map(async(image) => {
             const fullImagePath = path.join(eleventyConfig.dir.input, image.src);
+            const urlDir = path.dirname(image.src);
 
             await processImage({
                 imageElement: image,
                 inputPath: fullImagePath,
+                outputDir: path.join(CACHE_BASE, urlDir),
+                urlPath: urlDir,
                 options: {
                     widths: image.sizes
                         .split(',')
@@ -127,9 +143,9 @@ export default function(eleventyConfig) {
     });
 
     eleventyConfig.on('eleventy.after', () => {
-        const from = '.cache/@11ty/_images/';
-        const to = path.join(eleventyConfig.directories.output, '_images');
-        fs.cpSync(from, to, { recursive: true });
+        if (fs.existsSync(CACHE_BASE)) {
+            fs.cpSync(CACHE_BASE, eleventyConfig.directories.output, { recursive: true });
+        }
     });
 
     eleventyConfig.addTransform('lazyYouTube', (content, outputPath) => {
