@@ -1,4 +1,4 @@
-name: yaml
+name: YAML
 
 on:
   pull_request:
