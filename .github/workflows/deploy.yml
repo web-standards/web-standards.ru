@@ -35,5 +35,5 @@ jobs:
         run: npm run build
       # Deploy
       - name: Deploy
-        run: rsync -e "ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no" --archive --compress --delete . wst@web-standards.ru:/var/www/web-standards.ru/html/
+        run: rsync -e "ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no" --archive --verbose --compress --delete --delete-excluded --exclude '.DS_Store' --copy-links . deploy@web-standards.ru:/opt/sites/web-standards.ru/public/site/
         working-directory: ./dist
