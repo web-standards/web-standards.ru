@@ -15,7 +15,7 @@
     "build": "npm run fetch-podcast-data && cross-env-shell NODE_ENV=production \"rm -rf dist && eleventy\"",
     "deploy": "rsync --archive --verbose --compress --delete --delete-excluded --exclude '.DS_Store' --copy-links ./dist/ deploy@web-standards.ru:/opt/sites/web-standards.ru/public/site/",
     "caddy": "scp Caddyfile root@wsd.events:/opt/sites/web-standards.ru/ && ssh root@web-standards.ru setup reload",
-    "fetch-podcast-data": "npm install git://github.com/web-standards/podcast.git#main --save=false --package-lock=false",
+    "fetch-podcast-data": "npm install git://github.com/web-standards/podcast.git#main --save=false --package-lock=false --ignore-scripts",
     "postinstall": "npm run fetch-podcast-data"
   },
   "devDependencies": {
