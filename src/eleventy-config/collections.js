@@ -24,16 +24,13 @@ export default function(eleventyConfig) {
     for (const templatePath of templatesPaths) {
         const episodeFolderPath = path.dirname(templatePath);
         const episodeDataFilePath = path.join(episodeFolderPath, 'index.yml');
-        const episodeGeneratedDataFilePath = path.join(episodeFolderPath, 'index.json');
         const relativePath = path.relative('node_modules/podcast/src/episodes', templatePath);
 
         const templateContent = fs.readFileSync(templatePath, 'utf-8');
         const templateDataFileContent = fs.readFileSync(episodeDataFilePath, 'utf-8');
-        const templateGeneratedDataFileContent = fs.readFileSync(episodeGeneratedDataFilePath, 'utf-8');
         const templateData = yaml.load(templateDataFileContent);
-        const templateGeneratedData = JSON.parse(templateGeneratedDataFileContent);
 
-        Object.assign(templateData, templateGeneratedData, {
+        Object.assign(templateData, {
             permalink: false,
             layout: false,
             tags: ['episodes'],
