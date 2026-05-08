@@ -1,7 +1,7 @@
 import path from 'node:path';
 import os from 'node:os';
 import fs from 'node:fs';
-import htmlmin from 'html-minifier-terser';
+import htmlmin from 'html-minifier-next';
 import minifyXml from 'minify-xml';
 import { parseHTML } from 'linkedom';
 import Image from '@11ty/eleventy-img';

@@ -1,5 +1,5 @@
 import markdownIt from 'markdown-it';
-import htmlmin from 'html-minifier-terser';
+import htmlmin from 'html-minifier-next';
 
 const markdown = markdownIt({
     html: true,
