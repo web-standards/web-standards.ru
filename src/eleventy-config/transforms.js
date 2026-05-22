@@ -3,8 +3,8 @@ import os from 'node:os';
 import fs from 'node:fs';
 import htmlmin from 'html-minifier-next';
 import minifyXml from 'minify-xml';
-import { parseHTML } from 'linkedom';
 import Image from '@11ty/eleventy-img';
+import { walk, hasNodeClass, html, htmlToTree } from './posthtml-utils.js';
 
 Image.concurrency = os.availableParallelism ? os.availableParallelism() : os.cpus().length;
 
@@ -17,129 +17,107 @@ function filenameFormat(id, src, width, format) {
     return `${name}-${width}.${format}`;
 }
 
-async function processImage({ imageElement, inputPath, outputDir, urlPath, options, attributes }) {
-    const imageStats = await Image(inputPath, {
-        outputDir,
-        urlPath,
-        filenameFormat,
-        ...options
-    });
-
-    const imageAttributes = Object.assign(
-        {},
-        attributes ?? {},
-        Object.fromEntries(
-            [...imageElement.attributes].map((attr) => [attr.name, attr.value])
-        )
-    );
-
-    const tempElement = imageElement.ownerDocument.createElement('div');
-    tempElement.innerHTML = Image.generateHTML(imageStats, imageAttributes);
-
-    imageElement.replaceWith(tempElement.firstElementChild);
-}
-
 export default function(eleventyConfig) {
     // преобразование контентных изображений
-    eleventyConfig.addTransform('optimizeContentImages', async function(content) {
-        if (!this.page.inputPath.includes('/articles/')) {
-            return content;
+    eleventyConfig.htmlTransformer.addPosthtmlPlugin('html', function (context = {}) {
+        const isArticlePage = context.page?.inputPath?.includes?.('/articles/');
+
+        if (!isArticlePage) {
+            return () => {}
         }
 
-        if (!this.page.outputPath.endsWith('.html')) {
-            return content;
+        return async function (tree) {
+            const articleSourceFolder = path.dirname(context.page.inputPath);
+
+            const imageTransformPromises = walk(tree)
+                .filter((node) => node.tag)
+                .filter((node) => hasNodeClass(node, 'article__content'))
+                .take(1)
+                .flatMap((node) => walk(node.content))
+                .filter((node) => node.tag === 'img')
+                .filter((node) => !node.attrs?.src?.match?.(/^https?:/))
+                .map(async (node) => {
+                    const fullImagePath = path.join(articleSourceFolder, node.attrs.src);
+                    const isGif = path.extname(fullImagePath) === '.gif';
+                    const imageDir = path.dirname(node.attrs.src);
+                    const relativeDir = path.join(path.dirname(context.page.inputPath), imageDir).replace(/^src\//, '');
+
+                    const imageStats = await Image(fullImagePath, {
+                        outputDir: path.join(CACHE_BASE, relativeDir),
+                        urlPath: imageDir,
+                        filenameFormat,
+                        widths: ['auto', 600, 1200, 2400],
+                        formats: isProdMode && !isGif
+                            ? ['svg', 'avif', 'webp', 'auto']
+                            : ['svg', 'webp', 'auto'],
+                        svgShortCircuit: true,
+                        sharpOptions: {
+                            animated: true,
+                        },
+                    });
+
+                    const imageAttributes = Object.assign({}, node.attrs, {
+                        loading: 'lazy',
+                        decoding: 'async',
+                        sizes: [
+                            '(min-width: 1920px) calc((1920px - 2 * 64px) * 5 / 8 - 2 * 16px)',
+                            '(min-width: 1240px) calc((100vw - 2 * 64px) * 5 / 8 - 2 * 16px)',
+                            '(min-width: 700px) calc(700px - 2 * 16px)',
+                            'calc(100vw - 2 * 16px)',
+                        ].join(','),
+                    });
+
+                    const [newImageNode] = htmlToTree(Image.generateHTML(imageStats, imageAttributes));
+                    node.attrs = {};
+                    Object.assign(node, newImageNode);
+                })
+                .toArray();
+
+            await Promise.all(imageTransformPromises);
         }
-
-        const { document } = parseHTML(content);
-        const images = Array.from(document.querySelectorAll('.article__content img'))
-            .filter((image) => !image.src.match(/^https?:/));
-
-        if (images.length === 0) {
-            return content;
-        }
-
-        const articleSourceFolder = path.dirname(this.page.inputPath);
-
-        await Promise.all(images.map(async(image) => {
-            const fullImagePath = path.join(articleSourceFolder, image.src);
-            const isGif = path.extname(fullImagePath) === '.gif';
-
-            const imageDir = path.dirname(image.src);
-            const relativeDir = path.join(path.dirname(this.page.inputPath), imageDir).replace(/^src\//, '');
-
-            await processImage({
-                document,
-                imageElement: image,
-                inputPath: fullImagePath,
-                outputDir: path.join(CACHE_BASE, relativeDir),
-                urlPath: imageDir,
-                options: {
-                    widths: ['auto', 600, 1200, 2400],
-                    // `sharp`, на данный момент, не поддерживает анимированный avif
-                    formats: isProdMode && !isGif
-                        ? ['svg', 'avif', 'webp', 'auto']
-                        : ['svg', 'webp', 'auto'],
-                    svgShortCircuit: true,
-                    sharpOptions: {
-                        animated: true,
-                    },
-                },
-                attributes: {
-                    loading: 'lazy',
-                    decoding: 'async',
-                    sizes: [
-                        '(min-width: 1920px) calc((1920px - 2 * 64px) * 5 / 8 - 2 * 16px)',
-                        '(min-width: 1240px) calc((100vw - 2 * 64px) * 5 / 8 - 2 * 16px)',
-                        '(min-width: 700px) calc(700px - 2 * 16px)',
-                        'calc(100vw - 2 * 16px)',
-                    ].join(','),
-                },
-            });
-        }));
-
-        return document.toString();
     });
 
     // преобразование аватаров
-    eleventyConfig.addTransform('optimizeAvatarImages', async function(content) {
-        if (!this.page.outputPath.endsWith?.('.html')) {
-            return content;
+    eleventyConfig.htmlTransformer.addPosthtmlPlugin('html', function () {
+        return async function (tree) {
+            const imageTransformPromises = walk(tree)
+                .filter((node) => node.tag === 'img')
+                .filter((node) => !node.attrs?.src?.match?.(/^https?:/))
+                .filter((node) => hasNodeClass(node, 'blob__photo'))
+                .map(async (node) => {
+                    const fullImagePath = path.join(eleventyConfig.dir.input, node.attrs.src);
+                    const urlDir = path.dirname(node.attrs.src);
+
+                    const imageStats = await Image(fullImagePath, {
+                        outputDir: path.join(CACHE_BASE, urlDir),
+                        urlPath: urlDir,
+                        filenameFormat,
+                        widths: node.attrs.sizes
+                            .split(',')
+                            .flatMap((entry) => {
+                                entry = entry.split(/\s+/).at(-1);
+                                entry = parseFloat(entry);
+                                return [entry, entry * 2];
+                            }),
+                        formats: isProdMode
+                            ? ['svg', 'avif', 'webp', 'auto']
+                            : ['svg', 'webp', 'auto'],
+                        svgShortCircuit: true,
+                    });
+
+                    const imageAttributes = Object.assign({}, node.attrs, {
+                        loading: 'lazy',
+                        decoding: 'async',
+                    });
+
+                    const [newImageNode] = htmlToTree(Image.generateHTML(imageStats, imageAttributes));
+                    node.attrs = {};
+                    Object.assign(node, newImageNode);
+                })
+                .toArray();
+
+            await Promise.all(imageTransformPromises);
         }
-
-        const { document } = parseHTML(content);
-        const images = Array.from(document.querySelectorAll('.blob__photo'))
-            .filter((image) => !image.src.match(/^https?:/));
-
-        if (images.length === 0) {
-            return content;
-        }
-
-        await Promise.all(images.map(async(image) => {
-            const fullImagePath = path.join(eleventyConfig.dir.input, image.src);
-            const urlDir = path.dirname(image.src);
-
-            await processImage({
-                imageElement: image,
-                inputPath: fullImagePath,
-                outputDir: path.join(CACHE_BASE, urlDir),
-                urlPath: urlDir,
-                options: {
-                    widths: image.sizes
-                        .split(',')
-                        .flatMap((entry) => {
-                            entry = entry.split(/\s+/).at(-1);
-                            entry = parseFloat(entry);
-                            return [entry, entry * 2];
-                        }),
-                    formats: isProdMode
-                        ? ['svg', 'avif', 'webp', 'auto']
-                        : ['svg', 'webp', 'auto'],
-                    svgShortCircuit: true,
-                },
-            });
-        }));
-
-        return document.toString();
     });
 
     eleventyConfig.on('eleventy.after', () => {
@@ -172,59 +150,63 @@ export default function(eleventyConfig) {
     });
 
     // открытие ссылок в новой вкладке внутри страниц эпизодов
-    eleventyConfig.addTransform('podcast-content', async function(content) {
-        if (!this.page?.outputPath?.endsWith?.('html')) {
-            return content;
+    eleventyConfig.htmlTransformer.addPosthtmlPlugin('html', function (context = {}) {
+        const isPodcastPage = /\/podcast\/\d+\//.test(context.url);
+
+        if (!isPodcastPage) {
+            return () => {};
         }
 
-        // игнорируем страницы, не попадающие под url вида `/podcast/<номер эпизода>/`
-        if (!(/\podcast\/\d+\//.test(this.page?.url))) {
-            return content;
+        return function (tree) {
+            walk(tree)
+                .filter((node) => node.tag)
+                .filter((node) => hasNodeClass(node, 'podcast__content'))
+                .take(1)
+                .flatMap((node) => walk(node.content))
+                .filter((node) => node.tag === 'a')
+                .filter((node) => node.attrs?.href?.startsWith?.('http'))
+                .forEach((node) => {
+                    Object.assign(node.attrs, {
+                        target: '_blank',
+                        rel: 'noopener'
+                    });
+                });
         }
-
-        const { document } = parseHTML(content);
-
-        for (const link of document.querySelectorAll('.podcast__content a[href^="http"]')) {
-            link.setAttribute('target', '_blank');
-            link.setAttribute('rel', 'noopener');
-        }
-
-        return document.toString();
     });
 
     // добавление id на заголовки и кнопок для копирования ссылок
-    eleventyConfig.addTransform('content-headings', async function(content) {
-        if (!this.page?.outputPath?.endsWith?.('html')) {
-            return content;
+    eleventyConfig.htmlTransformer.addPosthtmlPlugin('html', function () {
+        return function (tree) {
+            const headings = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
+            let headingCounter = 0;
+            walk(tree)
+                .filter((node) => node.tag)
+                .filter((node) => hasNodeClass(node, 'content'))
+                .take(1)
+                .flatMap((node) => walk(node.content))
+                .filter((node) => node.tag && headings.has(node.tag))
+                .forEach((node) => {
+                    node.attrs ??= {}
+                    const headingId = node.attrs.id ?? `section-${++headingCounter}`;
+                    node.attrs.id = headingId;
+                    node.content = [
+                        ...(Array.isArray(node.content) ? node.content : [node.content]),
+                        ...html`
+                            <span class="tooltip">
+                                <button
+                                    class="tooltip__button"
+                                    data-href="#${headingId}"
+                                    aria-labelledby="copy-${headingId}"
+                                    aria-label="Копировать ссылку на заголовок"
+                                ></button>
+                                <span class="tooltip__label" role="tooltip" id="copy-${headingId}">
+                                    Скопировать ссылку
+                                </span>
+                            </span>
+                        `
+                    ]
+                })
         }
-
-        const { document } = parseHTML(content);
-
-        const headings = Array.from(document.querySelectorAll('.content :where(h1, h2, h3, h4, h5, h6)'));
-
-        let headingCounter = 0;
-
-        for (const heading of headings) {
-            const headingId = heading.id || `section-${++headingCounter}`;
-            heading.id = headingId;
-            const headingHTML = heading.innerHTML;
-            heading.innerHTML = `
-                ${headingHTML}
-                <span class="tooltip">
-                    <button
-                        class="tooltip__button"
-                        data-href="#${headingId}"
-                        aria-labelledby="copy-${headingId}"
-                        aria-label="Копировать ссылку на заголовок"
-                    ></button>
-                    <span class="tooltip__label" role="tooltip" id="copy-${headingId}">
-                        Скопировать ссылку
-                    </span>
-                </span>
-            `;
-        }
-
-        return document.toString();
     });
 
     if (isProdMode) {
