@@ -31,7 +31,7 @@
     "eslint": "^10.4.0",
     "fast-glob": "^3.3.3",
     "globals": "^17.6.0",
-    "html-minifier-next": "^6.2.6",
+    "html-minifier-next": "^6.2.7",
     "js-yaml": "^4.1.1",
     "lightningcss": "^1.32.0",
     "linkedom": "^0.18.12",
@@ -45,7 +45,7 @@
     "remark-lint-ordered-list-marker-value": "^4.0.1",
     "remark-lint-strong-marker": "^4.0.1",
     "remark-lint-unordered-list-marker-style": "^4.0.1",
-    "stylelint": "^17.11.1",
+    "stylelint": "^17.12.0",
     "stylelint-order": "^8.1.1",
     "typograf": "^7.7.0"
   },
