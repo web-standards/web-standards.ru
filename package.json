@@ -19,7 +19,7 @@
     "postinstall": "npm run fetch-podcast-data"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^3.1.5",
+    "@11ty/eleventy": "^3.1.6",
     "@11ty/eleventy-img": "^6.0.4",
     "@eslint/js": "^10.0.1",
     "@mavrin/remark-typograf": "^2.2.0",
@@ -28,11 +28,11 @@
     "cross-env": "^10.1.0",
     "editorconfig-checker": "^6.1.1",
     "esbuild": "^0.28.0",
-    "eslint": "^10.4.0",
+    "eslint": "^10.4.1",
     "fast-glob": "^3.3.3",
     "globals": "^17.6.0",
-    "html-minifier-next": "^6.2.7",
-    "js-yaml": "^4.1.1",
+    "html-minifier-next": "^6.2.8",
+    "js-yaml": "^4.2.0",
     "lightningcss": "^1.32.0",
     "linkedom": "^0.18.12",
     "markdown-it-multimd-table": "^4.2.3",
