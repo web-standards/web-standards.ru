@@ -20,7 +20,10 @@ web-standards.ru {
         path /podcast/cover.png /podcast/episodes/*.mp3 /podcast/feed/
     }
 
-    header @cors Access-Control-Allow-Origin *
+    header @cors {
+        Access-Control-Allow-Origin *
+        Cross-Origin-Resource-Policy cross-origin
+    }
 
     handle_errors {
         @404 expression {http.error.status_code} == 404
