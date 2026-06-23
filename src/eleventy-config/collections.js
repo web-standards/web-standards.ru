@@ -1,7 +1,7 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import fastGlob from 'fast-glob';
-import yaml from 'js-yaml';
+import { load as loadYaml } from 'js-yaml';
 
 export default function(eleventyConfig) {
     eleventyConfig.addCollection('tagList', (collection) => {
@@ -28,7 +28,7 @@ export default function(eleventyConfig) {
 
         const templateContent = fs.readFileSync(templatePath, 'utf-8');
         const templateDataFileContent = fs.readFileSync(episodeDataFilePath, 'utf-8');
-        const templateData = yaml.load(templateDataFileContent);
+        const templateData = loadYaml(templateDataFileContent);
 
         Object.assign(templateData, {
             permalink: false,
