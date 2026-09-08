@@ -93,7 +93,7 @@ npm i yorkie -D
 ```diff
     <meta charset="utf-8">
     <meta charset="x-ua-compatible" content="ie=edge">
-    <meta charset="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="viewport" content="width=device-width">
 -   <link rel="icon" href="<%= BASE_URL %>favicon.ico">
 +   <link rel="icon" href="/favicon.ico">
     …
