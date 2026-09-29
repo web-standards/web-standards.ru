@@ -13,15 +13,18 @@ const MEDIA = {
     [THEMES.DARK]: '(prefers-color-scheme: dark)',
 };
 
+const COLOR_SCHEME = {
+    [THEMES.AUTO]: 'light dark',
+    [THEMES.LIGHT]: 'light',
+    [THEMES.DARK]: 'dark',
+}
+
 const domRefs = {
     meta: {
         [THEMES.LIGHT]: document.head.querySelector('meta[name=theme-color][media*=prefers-color-scheme][media*=light]'),
         [THEMES.DARK]: document.head.querySelector('meta[name=theme-color][media*=prefers-color-scheme][media*=dark]'),
     },
-    styles: {
-        [THEMES.LIGHT]: document.head.querySelector('style[media*=prefers-color-scheme][media*=light]'),
-        [THEMES.DARK]: document.head.querySelector('style[media*=prefers-color-scheme][media*=dark]'),
-    },
+    colorSchemeMeta: document.head.querySelector('meta[name=color-scheme]'),
     switcher: null,
 };
 
@@ -47,15 +50,13 @@ function applyTheme(theme) {
         }
     }
 
-    [
-        ...Object.entries(domRefs.meta),
-        ...Object.entries(domRefs.styles),
-    ].forEach(([originalTheme, element]) => {
+    Object.entries(domRefs.meta).forEach(([originalTheme, element]) => {
         element.media = theme === THEMES.AUTO
             ? MEDIA[originalTheme]
             : theme === originalTheme ? MEDIA.ENABLED : MEDIA.DISABLED;
-        ;
     });
+
+    domRefs.colorSchemeMeta.content = COLOR_SCHEME[theme];
 }
 
 applyTheme();
