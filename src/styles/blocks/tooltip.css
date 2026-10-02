@@ -30,6 +30,7 @@
     position: absolute;
     bottom: calc(100% + 10px);
     left: 50%;
+    z-index: 2;
     padding: 8px 10px;
     color: #ffffff;
     font-weight: normal;
