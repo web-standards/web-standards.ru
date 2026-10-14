@@ -31,8 +31,8 @@
     "eslint": "^10.12.0",
     "fast-glob": "^3.3.3",
     "globals": "^17.13.0",
-    "html-minifier-next": "^8.10.2",
-    "js-yaml": "^5.4.2",
+    "html-minifier-next": "^8.10.7",
+    "js-yaml": "^5.4.3",
     "lightningcss": "^1.33.0",
     "markdown-it-multimd-table": "^4.2.3",
     "minify-xml": "^4.5.2",
@@ -46,7 +46,7 @@
     "remark-lint-strong-marker": "^4.0.1",
     "remark-lint-unordered-list-marker-style": "^4.0.1",
     "stylelint": "^17.16.0",
-    "stylelint-order": "^8.1.1",
+    "stylelint-order": "^8.1.2",
     "typograf": "^7.8.0"
   },
   "browserslist": [
