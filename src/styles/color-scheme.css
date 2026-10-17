@@ -1,0 +1,186 @@
+:root {
+    --token-color-archive-tag-current: light-dark(
+        #000000,
+        inherit
+    );
+    --token-color-article-card-author: light-dark(
+        var(--color-grey-darker),
+        var(--color-dark-text-primary)
+    );
+    --token-color-article-card-date: light-dark(
+        var(--color-grey-medium),
+        var(--color-dark-text-secondary)
+    );
+    --token-color-article-card-link: light-dark(
+        var(--color-grey-darker),
+        var(--color-dark-text-primary)
+    );
+    --token-color-article-date: light-dark(
+        var(--color-grey-lighter),
+        var(--color-dark-text-secondary)
+    );
+    --token-color-article-heading-border: light-dark(
+        var(--color-grey-medium),
+        var(--color-dark-divider)
+    );
+    --token-color-articles-item-border-color: light-dark(
+        var(--color-grey-lighter),
+        var(--color-dark-divider)
+    );
+    --token-color-articles-item-featured-backgound: light-dark(
+        var(--color-grey-dark),
+        var(--color-dark-background-featured-article)
+    );
+    --token-color-background-primary: light-dark(
+        #ffffff,
+        var(--color-dark-background)
+    );
+    --token-color-content-block-code-background: light-dark(
+        var(--color-green-light),
+        var(--color-dark-background-code)
+    );
+    --token-color-content-block-code-fade: light-dark(
+        linear-gradient(to left, var(--color-blue-lightest), var(--color-blue-lightest-0a)),
+        linear-gradient(to left, var(--color-dark-background-code), var(--color-dark-background-code-0a))
+    );
+    --token-color-content-block-code-gradient: light-dark(
+        linear-gradient(to right, var(--color-green-light), var(--color-blue-lightest)),
+        linear-gradient(to right, var(--color-dark-background-code) 0 0)
+    );
+    --token-color-content-block-code-scrollbar: light-dark(
+        var(--color-green-darker-50a),
+        var(--color-dark-background-code-scrollbar)
+    );
+    --token-color-content-blockquote-border: light-dark(
+        var(--color-grey-lighter),
+        #4d5466
+    );
+    --token-color-content-blockquote-text: light-dark(
+        inherit,
+        var(--color-dark-text-content)
+    );
+    --token-color-content-first-letter: light-dark(
+        var(--color-grey-medium),
+        var(--color-dark-text-primary)
+    );
+    --token-color-content-heading: light-dark(
+        inherit,
+        var(--color-dark-text-primary)
+    );
+    --token-color-content-inline-code-background: light-dark(
+        var(--color-grey-lightest),
+        var(--color-dark-background-code)
+    );
+    --token-color-content-link: light-dark(
+        var(--color-blue-darker),
+        var(--color-dark-text-link)
+    );
+    --token-color-content-link-visited: light-dark(
+        var(--color-grey-medium),
+        var(--color-dark-text-link-visited)
+    );
+    --token-color-content-table-border: light-dark(
+        var(--color-grey-lighter),
+        #4d5466
+    );
+    --token-color-content-table-head: light-dark(
+        var(--color-green-light),
+        #2a3443
+    );
+    --token-color-content-table-head-gradient: light-dark(
+        linear-gradient(to right, var(--color-green-light), var(--color-blue-lightest)),
+        linear-gradient(to right, var(--token-color-content-table-head) 0 0)
+    );
+    --token-color-content-text: light-dark(
+        #000000,
+        var(--color-dark-text-content)
+    );
+    --token-color-creators-author: light-dark(
+        var(--color-grey-darker),
+        var(--color-dark-text-secondary)
+    );
+    --token-color-creators-author-visited: light-dark(
+        var(--color-grey-medium),
+        var(--color-dark-text-link-visited)
+    );
+    --token-color-footer-background: light-dark(
+        var(--color-grey-dark),
+        var(--color-dark-background-footer)
+    );
+    --token-color-footer-link: light-dark(
+        var(--color-grey-lightest),
+        var(--color-dark-text-primary)
+    );
+    --token-color-footer-text: light-dark(
+        var(--color-grey-lighter),
+        var(--color-dark-text-secondary)
+    );
+    --token-color-header-index-border: light-dark(
+        var(--color-grey-lighter),
+        var(--color-dark-divider)
+    );
+    --token-color-links-background: light-dark(
+        var(--color-grey-lightest),
+        var(--color-dark-background-social)
+    );
+    --token-color-links-divider: light-dark(
+        var(--color-grey-lighter),
+        var(--color-dark-divider)
+    );
+    --token-color-logo-tagline: light-dark(
+        var(--color-grey-dark),
+        var(--color-dark-text-primary)
+    );
+    --token-color-menu-button: light-dark(
+        #000000,
+        var(--color-dark-text-header)
+    );
+    --token-color-menu-link: light-dark(
+        var(--color-special-dark),
+        var(--color-dark-text-link)
+    );
+    --token-color-menu-link-current: light-dark(
+        #000000,
+        var(--color-dark-text-header)
+    );
+    --token-color-menu-list-background: light-dark(
+        #ffffff,
+        var(--color-dark-background)
+    );
+    --token-color-podcast-header-border: light-dark(
+        var(--color-grey-lightest),
+        var(--color-dark-divider)
+    );
+    --token-color-podcast-preview-background: light-dark(
+        transparent,
+        transparent
+    );
+    --token-color-podcast-preview-border: light-dark(
+        var(--color-grey-lighter),
+        var(--color-dark-divider)
+    );
+    --token-color-podcast-preview-link-hover: light-dark(
+        var(--color-blue-light),
+        var(--color-blue-light)
+    );
+    --token-color-podcast-preview-meta: light-dark(
+        var(--color-grey-medium),
+        var(--color-dark-text-secondary)
+    );
+    --token-color-podcast-preview-text: light-dark(
+        var(--color-grey-darker),
+        var(--color-dark-text-primary)
+    );
+    --token-color-podcast-timecode-link: light-dark(
+        var(--color-blue-darker),
+        var(--color-dark-text-link)
+    );
+    --token-color-scheme-switcher-hover: light-dark(
+        var(--color-grey-lightest),
+        var(--color-dark-divider)
+    );
+    --token-color-text-primary: light-dark(
+        #000000,
+        var(--color-dark-text-primary)
+    );
+}
