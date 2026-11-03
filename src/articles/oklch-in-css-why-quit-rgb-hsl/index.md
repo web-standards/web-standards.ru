@@ -26,7 +26,7 @@ featured: true
         padding-block: 24px;
         column-gap: 8px;
         border: 4px solid transparent;
-        border-image: linear-gradient(90deg, var(--token-color-content-block-code-gradient)) 1;
+        border-image: var(--token-color-content-block-code-gradient) 1;
         background-image:
             repeating-conic-gradient(
                 #fff 0% 25%,

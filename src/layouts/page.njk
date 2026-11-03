@@ -16,13 +16,7 @@
 
     <meta name="theme-color" content="#81c36d" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#273238" media="(prefers-color-scheme: dark)">
-    <style media="(prefers-color-scheme: light)">
-        {% include 'src/styles/themes/light.css' %}
-    </style>
-    <style media="(prefers-color-scheme: dark)">
-        {% include 'src/styles/themes/dark.css' %}
-    </style>
-
+    <meta name="color-scheme" content="light dark">
     {% if page.url.startsWith('/podcast/') %}
         <meta name="apple-itunes-app" content="app-id=1080500016">
     {% endif %}
