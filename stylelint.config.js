@@ -30,7 +30,6 @@ export default {
         'no-unknown-animations': true,
         'function-url-no-scheme-relative': true,
         'number-max-precision': 2,
-        'declaration-block-single-line-max-declarations': 1,
         'comment-word-disallowed-list': [
             'todo'
         ],
