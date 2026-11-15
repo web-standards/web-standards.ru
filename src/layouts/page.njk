@@ -37,8 +37,8 @@
     <script>
         {% include 'src/scripts/modules/scheme-switcher.js' %}
     </script>
-    <link rel="stylesheet" href="/styles/styles.css">
-    <link rel="stylesheet" href="/styles/print.css" media="print">
+    <link rel="stylesheet" href="/styles/styles.css?v={{ assetHash.styles }}">
+    <link rel="stylesheet" href="/styles/print.css?v={{ assetHash.styles }}" media="print">
 </head>
 <body class="page__body">
     {% include 'header.njk' %}
@@ -48,6 +48,6 @@
     {% include 'aside.njk' %}
     {% include 'footer.njk' %}
 
-    <script src="/scripts/index.js"></script>
+    <script src="/scripts/index.js?v={{ assetHash.scripts }}"></script>
 </body>
 </html>

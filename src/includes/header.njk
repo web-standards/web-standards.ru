@@ -12,7 +12,7 @@
     <div class="header__logo logo {{ logoMod }}">
         <a class="logo__link" href="/">
             <img class="logo__image"
-                src="{{ path }}images/logo.svg"
+                src="{{ path }}images/logo.svg?v={{ assetHash.images }}"
                 width="40" height="44"
                 alt="Логотип Веб-стандартов">
             <p class="logo__title">
@@ -31,10 +31,10 @@
             aria-label="Открыть меню">
             <svg class="menu__icon" aria-hidden="true" width="32" height="32">
                 <use class="menu__icon-menu"
-                    href="{{ path }}images/sprite.svg#menu">
+                    href="{{ path }}images/sprite.svg?v={{ assetHash.images }}#menu">
                 </use>
                 <use class="menu__icon-cross"
-                    href="{{ path }}images/sprite.svg#cross">
+                    href="{{ path }}images/sprite.svg?v={{ assetHash.images }}#cross">
                 </use>
             </svg>
         </button>
@@ -43,7 +43,7 @@
     {% if isMainPage and lastPodcastEpisode %}
         <a class="header__informers informer" href="/podcast/{{ lastPodcastEpisode.data.episode }}/">
             <svg class="informer__icon" aria-hidden="true" width="32" height="32">
-                <use href="{{ path }}images/sprite.svg#wave"></use>
+                <use href="{{ path }}images/sprite.svg?v={{ assetHash.images }}#wave"></use>
             </svg>
             <b class="informer__meta">
                 {{- lastPodcastEpisode.data.episode -}}

@@ -7,6 +7,7 @@ export default async function(eleventyConfig) {
         import('./src/eleventy-config/shortcodes.js'),
         import('./src/eleventy-config/static-files.js'),
         import('./src/eleventy-config/extensions.js'),
+        import('./src/eleventy-config/precompress.js'),
     ]);
 
     modules.forEach(module => module.default(eleventyConfig));
