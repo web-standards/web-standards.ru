@@ -87,7 +87,7 @@
             {% set featuredAlt = article.data.hero.alt %}
         {% endif %}
         <img class="article-card__hero-image--featured"
-            src="{{ featuredImg }}"
+            src="{{ featuredImg | version }}"
             alt="{{ featuredAlt }}"
             itemprop="image">
     {% endif %}

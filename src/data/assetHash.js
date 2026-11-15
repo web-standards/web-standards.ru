@@ -18,8 +18,8 @@ async function hashFiles(pattern) {
 
 export default async function() {
     return {
-        styles: await hashFiles('src/styles/**/*.css'),
+        // Шрифты и картинки тоже: их адреса с ?v= попадают в собранный CSS
+        styles: await hashFiles('src/{styles,fonts,images}/**/*'),
         scripts: await hashFiles('src/scripts/**/*.js'),
-        images: await hashFiles('src/images/{logo.svg,sprite.svg,icons/*}'),
     };
 }

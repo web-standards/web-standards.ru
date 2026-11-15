@@ -1,5 +1,6 @@
 import markdownIt from 'markdown-it';
 import htmlmin from 'html-minifier-next';
+import { version } from '../libs/file-hash.js';
 
 const markdown = markdownIt({
     html: true,
@@ -21,6 +22,10 @@ export default function(eleventyConfig) {
                 return match.slice(0, -1) + prefix + match.slice(-1);
             }
         });
+    });
+
+    eleventyConfig.addFilter('version', (url) => {
+        return version(url);
     });
 
     // Даты

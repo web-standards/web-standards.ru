@@ -38,7 +38,7 @@ layout: page.njk
                 {% if hero.contain %}
                     style="background: {{ hero.background }};"
                 {% endif %}>
-                <img src="{{ hero.src }}" class="article__hero-image
+                <img src="{{ [page.url, hero.src] | join | version }}" class="article__hero-image
                 {% if hero.contain %}
                     article__hero-image--contain
                 {% endif %}"

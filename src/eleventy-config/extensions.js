@@ -1,6 +1,7 @@
 import { load as loadYaml } from 'js-yaml';
 import eleventyPluginCss from '../libs/eleventy-plugin-css.js';
 import eleventyPluginJs from '../libs/eleventy-plugin-js.js';
+import { version } from '../libs/file-hash.js';
 
 const isProdMode = process.env.NODE_ENV === 'production';
 
@@ -16,6 +17,11 @@ export default async function(eleventyConfig) {
         /** @type (import('lightningcss').BundleAsyncOptions */
         lightningcss: {
             minify: isProdMode,
+            visitor: {
+                Url(url) {
+                    return { ...url, url: version(url.url) };
+                },
+            },
         },
     });
 

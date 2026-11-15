@@ -11,6 +11,7 @@
     "eslint": "eslint --ignore-pattern dist",
     "markdown": "remark 'src/articles/**/*.md' --quiet",
     "typograph": "remark",
+    "check-cache": "node src/libs/check-cache.js",
     "test": "npm run editorconfig && npm run stylelint && npm run markdown && npm run eslint",
     "build": "npm run fetch-podcast-data && cross-env-shell NODE_ENV=production \"rm -rf dist && eleventy\"",
     "deploy": "rsync --archive --checksum --no-times --verbose --compress --delete --delete-excluded --exclude '.DS_Store' --copy-links ./dist/ deploy@web-standards.ru:/opt/sites/web-standards.ru/public/site/",

@@ -5,6 +5,7 @@ import htmlmin from 'html-minifier-next';
 import minifyXml from 'minify-xml';
 import Image from '@11ty/eleventy-img';
 import { walk, hasNodeClass, html, htmlToTree } from './posthtml-utils.js';
+import { fileHash } from '../libs/file-hash.js';
 
 Image.concurrency = os.availableParallelism ? os.availableParallelism() : os.cpus().length;
 
@@ -15,6 +16,20 @@ const CACHE_BASE = '.cache/images';
 function filenameFormat(id, src, width, format) {
     const name = path.basename(src, path.extname(src));
     return `${name}-${width}.${format}`;
+}
+
+// Добавляет ?v= с хешем исходника ко всем адресам картинки. Image кеширует
+// результаты между вызовами, поэтому собирает новые объекты, а не меняет их
+function versionImageStats(imageStats, sourcePath) {
+    const hash = fileHash(sourcePath);
+
+    return Object.fromEntries(Object.entries(imageStats).map(([format, entries]) => [
+        format,
+        entries.map((entry) => {
+            const url = `${entry.url}?v=${hash}`;
+            return { ...entry, url, srcset: entry.srcset.replace(entry.url, url) };
+        }),
+    ]));
 }
 
 export default function(eleventyConfig) {
@@ -67,7 +82,22 @@ export default function(eleventyConfig) {
                         ].join(','),
                     });
 
-                    const [newImageNode] = htmlToTree(Image.generateHTML(imageStats, imageAttributes));
+                    // srcset, написанный вручную в статье, остаётся как есть, но с версией
+                    if (node.attrs.srcset) {
+                        imageAttributes.srcset = node.attrs.srcset
+                            .split(',')
+                            .map((candidate) => {
+                                const [url, ...descriptors] = candidate.trim().split(/\s+/);
+                                if (url.match(/^https?:/)) {
+                                    return candidate.trim();
+                                }
+                                const hash = fileHash(path.join(articleSourceFolder, url));
+                                return [`${url}?v=${hash}`, ...descriptors].join(' ');
+                            })
+                            .join(', ');
+                    }
+
+                    const [newImageNode] = htmlToTree(Image.generateHTML(versionImageStats(imageStats, fullImagePath), imageAttributes));
                     node.attrs = {};
                     Object.assign(node, newImageNode);
                 })
@@ -110,7 +140,7 @@ export default function(eleventyConfig) {
                         decoding: 'async',
                     });
 
-                    const [newImageNode] = htmlToTree(Image.generateHTML(imageStats, imageAttributes));
+                    const [newImageNode] = htmlToTree(Image.generateHTML(versionImageStats(imageStats, fullImagePath), imageAttributes));
                     node.attrs = {};
                     Object.assign(node, newImageNode);
                 })
