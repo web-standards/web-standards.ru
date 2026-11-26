@@ -15,7 +15,7 @@
     padding: 0;
     font-size: inherit;
     vertical-align: middle;
-    background-color: var(--color-blue-darker);
+    background-color: var(--token-color-content-link);
     mask-image: url('/images/link.svg');
     border: none;
     cursor: pointer;
